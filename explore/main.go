@@ -221,6 +221,12 @@ func (lo *local) do() error {
 	nBuckets          := hashBits / 15       // Number of buckets
 	bucketMinDistance := hashBits - nBuckets // Log distance of closest bucket, 239
 
+	droot:= enode.LogDist(localId, bn.ID())
+	log.Infoln()
+	log.Infof("local distance from boot node %d", droot)
+	log.Infof("local node in boot table bucket number %d",  droot-bucketMinDistance-1)
+	log.Infoln()
+
 	for _, v := range nbs {
 		k, err := v4wire.DecodePubkey(crypto.S256(), v.ID)
 		if err!=nil {
@@ -231,7 +237,8 @@ func (lo *local) do() error {
 		id := enode.ID(crypto.Keccak256Hash(v.ID[:]))
 		//log.Infof("id: %s", hex.EncodeToString(id[:]))
 		d:= enode.LogDist(localId, id)
-		log.Infof("distance %d", d-bucketMinDistance-1)
+		log.Infof("distance %d", d)
+		log.Infof("bucket number %d", d-bucketMinDistance-1)
 	}
 
 
